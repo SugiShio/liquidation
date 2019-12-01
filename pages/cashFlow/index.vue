@@ -10,6 +10,10 @@ section.wrapper
       div
       div 合計
       div {{ total }}
+  el-button(
+    @click='$router.push("/cashFlow/new")'
+    size='small'
+    ) 新規追加
 </template>
 
 <script lang="ts">
