@@ -1,10 +1,13 @@
 <template lang="pug">
 section.wrapper
+  h2 {{ scopeText }}
   ul.list
     li.item(v-for='record in records')
+      div {{ date(record.date) }} 日
       div {{ record.name }}
       div {{ record.amount }}
     li.item
+      div
       div 合計
       div {{ total }}
 </template>
@@ -17,18 +20,24 @@ import CashRecord from '@/models/cashRecord.ts'
 export default Vue.extend({
   data() {
     const records: CashRecord[] = []
+    const today = new Date()
+    const scope = new Date(today.getFullYear(), today.getMonth())
     return {
       records,
-      total: 0
+      total: 0,
+      scope
     }
   },
   created() {
-    const today = new Date()
-    const startDate = new Date(today.getFullYear(), today.getMonth(), 1)
     const collection = firebase.firestore().collection('cashRecords')
+    const endDate = new Date(
+      this.scope.getFullYear(),
+      this.scope.getMonth() + 1
+    ).valueOf()
     collection
       .orderBy('date')
-      .where('date', '>=', startDate.valueOf())
+      .where('date', '>=', this.scope.valueOf())
+      .where('date', '<', endDate)
       .get()
       .then((querySnapShot) => {
         querySnapShot.forEach((doc) => {
@@ -37,6 +46,18 @@ export default Vue.extend({
           this.total += record.amount
         })
       })
+  },
+  computed: {
+    scopeText(): string {
+      const scope = new Date(this.scope)
+      return `${scope.getFullYear()}年${scope.getMonth() + 1}月`
+    }
+  },
+  methods: {
+    date(timestamp: number) {
+      const date = new Date(timestamp)
+      return date.getDate()
+    }
   }
 })
 </script>
