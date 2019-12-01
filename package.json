@@ -13,9 +13,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "nuxt": "^2.0.0",
+    "@nuxtjs/axios": "^5.3.6",
     "element-ui": "^2.4.11",
-    "@nuxtjs/axios": "^5.3.6"
+    "firebase": "^7.5.0",
+    "nuxt": "^2.0.0",
+    "pug": "^2.0.4",
+    "pug-plain-loader": "^1.0.0"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^1.0.1",
