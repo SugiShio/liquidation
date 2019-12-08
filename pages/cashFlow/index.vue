@@ -32,6 +32,12 @@ export default Vue.extend({
       scope
     }
   },
+  computed: {
+    scopeText(): string {
+      const scope = new Date(this.scope)
+      return `${scope.getFullYear()}年${scope.getMonth() + 1}月`
+    }
+  },
   created() {
     const collection = firebase.firestore().collection('cashRecords')
     const endDate = new Date(
@@ -50,12 +56,6 @@ export default Vue.extend({
           this.total += record.amount
         })
       })
-  },
-  computed: {
-    scopeText(): string {
-      const scope = new Date(this.scope)
-      return `${scope.getFullYear()}年${scope.getMonth() + 1}月`
-    }
   },
   methods: {
     date(timestamp: number) {
