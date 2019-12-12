@@ -1,6 +1,9 @@
 <template lang="pug">
 section.wrapper
-  h2 {{ scopeText }}
+  month-selector(
+    v-model='scope'
+    @month-changed='updateScope')
+
   ul.list
     li.item(v-for='record in records')
       div {{ date(record.date) }} 日
@@ -19,45 +22,44 @@ section.wrapper
 <script lang="ts">
 import Vue from 'vue'
 import firebase from '~/plugins/firebase.js'
+import { addMonth } from '@/scripts/date'
 import CashRecord from '@/models/cashRecord.ts'
+import monthSelector from '@/components/monthSelector.vue'
 
 export default Vue.extend({
+  components: { monthSelector },
   data() {
-    const records: CashRecord[] = []
-    const today = new Date()
-    const scope = new Date(today.getFullYear(), today.getMonth())
     return {
-      records,
-      total: 0,
-      scope
+      scope: addMonth(new Date(), -1)
     }
   },
   computed: {
-    scopeText(): string {
-      const scope = new Date(this.scope)
-      return `${scope.getFullYear()}年${scope.getMonth() + 1}月`
+    records() {
+      return this.$store.state.cashFlow.cashRecords
+    },
+    total() {
+      return this.$store.getters['cashFlow/total']
     }
   },
   created() {
-    const collection = firebase.firestore().collection('cashRecords')
-    const endDate = new Date(
-      this.scope.getFullYear(),
-      this.scope.getMonth() + 1
-    ).valueOf()
-    collection
-      .orderBy('date')
-      .where('date', '>=', this.scope.valueOf())
-      .where('date', '<', endDate)
-      .get()
-      .then((querySnapShot) => {
-        querySnapShot.forEach((doc) => {
-          const record = new CashRecord(doc.data())
-          this.records.push(record)
-          this.total += record.amount
-        })
-      })
+    this.setRecords()
   },
   methods: {
+    updateScope(date: Date) {
+      this.scope = date
+      this.setRecords()
+    },
+    setRecords() {
+      this.$store.commit('cashFlow/resetCashRecords')
+      const year = this.scope.getFullYear()
+      const month = this.scope.getMonth()
+      const startDate = new Date(year, month)
+      const endDate = new Date(year, month + 1)
+      this.$store.dispatch('cashFlow/fetchScopedRecords', {
+        startDate,
+        endDate
+      })
+    },
     date(timestamp: number) {
       const date = new Date(timestamp)
       return date.getDate()
@@ -73,7 +75,6 @@ export default Vue.extend({
   padding: 30px 10px;
 }
 .list {
-  max-width: 600px;
   margin: 50px auto;
 }
 .item {
