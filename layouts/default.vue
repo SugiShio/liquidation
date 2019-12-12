@@ -1,7 +1,8 @@
 <template lang="pug">
 div
   a(@click='signout') {{ userName }}
-  nuxt
+  .wrapper
+    nuxt
 </template>
 
 <style lang="scss">
@@ -37,3 +38,11 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.wrapper {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+</style>

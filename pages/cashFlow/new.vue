@@ -54,13 +54,15 @@ export default Vue.extend({
   },
   methods: {
     create() {
+      const whose = this.$store.state.userName
       this.isPosting = true
       const data = {
         name: this.record.name,
         amount: this.record.amount,
         isPayment: this.record.isPayment,
         createdAt: new Date(),
-        date: this.record.date
+        date: this.record.date,
+        whose
       }
       return firebase
         .firestore()

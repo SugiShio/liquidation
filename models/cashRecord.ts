@@ -3,6 +3,7 @@ export default class CashRecord {
   amount: number = 0
   isPayment: boolean = true
   date: number = 0
+  whose: string = ''
   // createdAt: Date
   constructor(data?: any) {
     if (!data) {
@@ -19,6 +20,7 @@ export default class CashRecord {
     this.name = data.name || (this.isPayment ? '不明な出金' : '不明な入金')
     this.amount = (this.isPayment ? 1 : -1) * (data.amount || 0)
     this.date = data.date
+    this.whose = data.whose
     // this.createdAt = data.createdAt
   }
 }
