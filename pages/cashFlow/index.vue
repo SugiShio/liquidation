@@ -28,9 +28,13 @@ import monthSelector from '@/components/monthSelector.vue'
 
 export default Vue.extend({
   components: { monthSelector },
-  data() {
+  asyncData({ route }) {
+    const year = Number(route.query.year)
+    const month = Number(route.query.month)
+    const scope =
+      year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     return {
-      scope: addMonth(new Date(), -1)
+      scope
     }
   },
   computed: {

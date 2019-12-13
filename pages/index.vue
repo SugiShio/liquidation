@@ -8,7 +8,9 @@ section
     span 円
   .verb {{ verb }}
   div 支出総額 {{ total }}円 / 支払い済み {{ usersTotal }}円
-  router-link(to='cashFlow') 明細
+  router-link(
+    :to='detailLink'
+    ) 明細
 
 </template>
 
@@ -33,11 +35,24 @@ export default Vue.extend({
     },
     verb() {
       return this.usersPayment < 0 ? 'もらう' : '支払う'
+    },
+    detailLink() {
+      return {
+        name: 'cashFlow',
+        query: {
+          year: this.scope.getFullYear(),
+          month: this.scope.getMonth() + 1
+        }
+      }
     }
   },
-  data() {
+  asyncData({ route }) {
+    const year = Number(route.query.year)
+    const month = Number(route.query.month)
+    const scope =
+      year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     return {
-      scope: addMonth(new Date(), -1)
+      scope
     }
   },
   created() {
@@ -46,7 +61,6 @@ export default Vue.extend({
   methods: {
     updateScope(date: Date) {
       this.scope = date
-      this.setRecords()
     },
     setRecords() {
       this.$store.commit('cashFlow/resetCashRecords')
@@ -58,6 +72,23 @@ export default Vue.extend({
         startDate,
         endDate
       })
+    }
+  },
+  watch: {
+    scope() {
+      this.$router.push({
+        query: {
+          year: this.scope.getFullYear(),
+          month: this.scope.getMonth() + 1
+        }
+      })
+      this.setRecords()
+    },
+    '$route.query'() {
+      const year = Number(this.$route.query.year)
+      const month = Number(this.$route.query.month)
+      this.scope =
+        year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     }
   }
 })
