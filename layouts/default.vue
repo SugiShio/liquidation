@@ -5,10 +5,6 @@ div
     nuxt
 </template>
 
-<style lang="scss">
-@import '@/assets/reset.scss';
-</style>
-
 <script lang="ts">
 import Vue from 'vue'
 import { auth } from '~/plugins/firebase.js'
@@ -43,6 +39,12 @@ export default Vue.extend({
 .wrapper {
   max-width: 600px;
   margin: auto;
-  padding: 20px;
+  padding: 40px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
 }
 </style>

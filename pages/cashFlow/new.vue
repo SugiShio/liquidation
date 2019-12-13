@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-  el-form(label-width='120px')
+  el-form(label-width='25%')
     el-form-item(
       label='名称'
       )
@@ -24,19 +24,11 @@ section
         format='yyyy/MM/dd'
         value-format='timestamp'
         )
-    el-form-item()
+    el-form-item
       el-radio-group(v-model='record.isPayment')
         el-radio-button(:label='true') 支払った
         el-radio-button(:label='false') 受け取った
-    el-form-item()
-      el-button(
-        @click='$router.push("/cashFlow")'
-        size='small'
-      ) 戻る
-      el-button(
-        @click='create'
-        size='small'
-      ) 送信
+    .l-button(@click='create') 送信
 
 </template>
 
@@ -80,5 +72,3 @@ export default Vue.extend({
   }
 })
 </script>
-
-<style lang="scss" scoped></style>

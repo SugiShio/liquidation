@@ -3,12 +3,21 @@ section
   month-selector(
     v-model='scope'
     @month-changed='updateScope')
-  div.payment
-    span.payment__amount {{ usersPayment }}
-    span 円
-  .verb {{ verb }}
-  div 支出総額 {{ total }}円 / 支払い済み {{ usersTotal }}円
-  router-link(
+  .payment
+    span.payment__amount {{ Number(Math.abs(usersPayment)).toLocaleString() }}
+    span 円 {{ verb }}
+  .totalBox
+    .totalBox__item
+      .totalBox__label 支出総額
+      .totalBox__amount
+        span {{ Number(total).toLocaleString() }}
+        | 円
+    .totalBox__item
+      .totalBox__label 支払い済み
+      .totalBox__amount
+        span {{ Number(usersTotal).toLocaleString() }}
+        | 円
+  router-link.l-button(
     :to='detailLink'
     ) 明細
 
@@ -95,14 +104,36 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/variables';
 .payment {
-  text-align: right;
+  margin: 40px 0;
+  text-align: center;
   &__amount {
     font-size: 40px;
   }
 }
 
-.verb {
-  text-align: right;
+.totalBox {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+
+  &__item {
+    text-align: center;
+    margin: 0 20px;
+  }
+
+  &__label {
+    font-size: 11px;
+    color: rgba($color-text, 0.7);
+  }
+
+  &__amount {
+    span {
+      margin-right: 2px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
 }
 </style>

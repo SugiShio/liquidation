@@ -1,33 +1,32 @@
 <template lang="pug">
-section.wrapper
+section
   month-selector(
     v-model='scope'
     @month-changed='updateScope')
-
+  .total
+    |合計
+    span {{ Number(total).toLocaleString() }}
+    |円
   ul.list
-    li.item(v-for='record in records')
-      div {{ date(record.date) }} 日
-      div {{ record.name }}
-      div {{ record.amount }}
-    li.item
-      div
-      div 合計
-      div {{ total }}
-  el-button(
+    list-item(
+      v-for='record in records'
+      :record='record')
+  .addButton(
     @click='$router.push("/cashFlow/new")'
     size='small'
-    ) 新規追加
+    ) +
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import listItem from './_listItem.vue'
 import firebase from '~/plugins/firebase.js'
 import { addMonth } from '@/scripts/date'
 import CashRecord from '@/models/cashRecord.ts'
 import monthSelector from '@/components/monthSelector.vue'
 
 export default Vue.extend({
-  components: { monthSelector },
+  components: { monthSelector, listItem },
   asyncData({ route }) {
     const year = Number(route.query.year)
     const month = Number(route.query.month)
@@ -73,24 +72,31 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  min-height: 100vh;
-  position: relative;
-  padding: 30px 10px;
+@import '@/assets/variables';
+.total {
+  margin: 40px 0 20px;
+  text-align: right;
+  span {
+    margin: 0 3px 0 10px;
+    font-size: 30px;
+  }
 }
+
 .list {
-  margin: 50px auto;
+  margin: 20px auto;
 }
-.item {
-  display: flex;
-  padding: 5px 0;
 
-  > div {
-    flex-basis: 100%;
-  }
-
-  &:last-child {
-    border-top: 1px solid #bbb;
-  }
+.addButton {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: $color-text;
+  box-shadow: 0 2px 5px rgba(#000, 0.5);
+  font-size: 30px;
+  text-align: center;
+  line-height: 40px;
+  color: $color-main;
 }
 </style>
