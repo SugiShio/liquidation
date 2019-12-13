@@ -1,6 +1,12 @@
 <template lang="pug">
 div
-  a(@click='signout') {{ userName }}
+  header.header
+    .header__item
+      div(
+        v-if='hasHistory'
+        @click='goBack') <
+    .header__item
+      a(@click='signout') Sign Out
   .wrapper
     nuxt
 </template>
@@ -10,8 +16,8 @@ import Vue from 'vue'
 import { auth } from '~/plugins/firebase.js'
 export default Vue.extend({
   computed: {
-    userName() {
-      return this.$store.state.userName || '名前未設定'
+    hasHistory() {
+      return process.client ? history.length >= 1 : false
     }
   },
   created() {
@@ -30,6 +36,9 @@ export default Vue.extend({
         this.$store.dispatch('signout')
         this.$router.push({ name: 'signin' })
       })
+    },
+    goBack() {
+      if (process.client) history.back()
     }
   }
 })
