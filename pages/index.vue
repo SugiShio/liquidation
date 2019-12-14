@@ -55,21 +55,18 @@ export default {
       }
     }
   },
-  asyncData({ route }) {
-    const year = Number(route.query.year)
-    const month = Number(route.query.month)
+  data() {
+    const year = Number(this.$route.query.year)
+    const month = Number(this.$route.query.month)
     const scope =
       year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     return {
-      scope
-    }
-  },
-  data() {
-    return {
+      scope,
       isLoading: true
     }
   },
   created() {
+    console.log(this.scope)
     this.setRecords()
   },
   methods: {
@@ -77,6 +74,7 @@ export default {
       this.scope = date
     },
     setRecords() {
+      console.log(this.scope)
       this.isLoading = true
       const year = this.scope.getFullYear()
       const month = this.scope.getMonth()

@@ -30,17 +30,13 @@ import monthSelector from '@/components/monthSelector.vue'
 
 export default {
   components: { monthSelector, listItem },
-  asyncData({ route }) {
-    const year = Number(route.query.year)
-    const month = Number(route.query.month)
+  data() {
+    const year = Number(this.$route.query.year)
+    const month = Number(this.$route.query.month)
     const scope =
       year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     return {
-      scope
-    }
-  },
-  data() {
-    return {
+      scope,
       isLoading: true
     }
   },
