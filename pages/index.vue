@@ -4,18 +4,18 @@ section
     v-model='scope'
     @month-changed='updateScope')
   .payment
-    span.payment__amount {{ Number(Math.abs(usersPayment)).toLocaleString() }}
+    span.payment__amount {{ numToString(usersPayment) }}
     span 円 {{ verb }}
   .totalBox
     .totalBox__item
       .totalBox__label 支出総額
       .totalBox__amount
-        span {{ Number(total).toLocaleString() }}
+        span {{ numToString(total) }}
         | 円
     .totalBox__item
       .totalBox__label 支払い済み
       .totalBox__amount
-        span {{ Number(usersTotal).toLocaleString() }}
+        span {{ numToString(usersTotal) }}
         | 円
   router-link.l-button(
     :to='detailLink'
@@ -36,16 +36,17 @@ export default Vue.extend({
     usersTotal(): number {
       return this.$store.getters['cashFlow/usersTotal']()
     },
-    users() {
+    users(): [] {
       return this.$store.getters['cashFlow/users']
     },
-    usersPayment() {
+    usersPayment(): number {
+      if (!this.users.length) return 0
       return Math.ceil(this.total / this.users.length - this.usersTotal)
     },
-    verb() {
+    verb(): string {
       return this.usersPayment < 0 ? 'もらう' : '支払う'
     },
-    detailLink() {
+    detailLink(): { name: string; query: { year: number; month: number } } {
       return {
         name: 'cashFlow',
         query: {
@@ -64,6 +65,11 @@ export default Vue.extend({
       scope
     }
   },
+  data() {
+    return {
+      isLoading: true
+    }
+  },
   created() {
     this.setRecords()
   },
@@ -72,15 +78,22 @@ export default Vue.extend({
       this.scope = date
     },
     setRecords() {
-      this.$store.commit('cashFlow/resetCashRecords')
+      this.isLoading = true
       const year = this.scope.getFullYear()
       const month = this.scope.getMonth()
       const startDate = new Date(year, month)
       const endDate = new Date(year, month + 1)
-      this.$store.dispatch('cashFlow/fetchScopedRecords', {
-        startDate,
-        endDate
-      })
+      this.$store
+        .dispatch('cashFlow/fetchScopedRecords', {
+          startDate,
+          endDate
+        })
+        .then(() => {
+          this.isLoading = false
+        })
+    },
+    numToString(num: number) {
+      return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
     }
   },
   watch: {

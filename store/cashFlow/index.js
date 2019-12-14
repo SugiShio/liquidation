@@ -30,32 +30,30 @@ export const getters = {
 }
 
 export const mutations = {
-  resetCashRecords(state) {
-    state.cashRecords = []
-  },
-  addCashRecords(state, { cashRecord }) {
-    state.cashRecords.push(cashRecord)
+  setCashRecords(state, { cashRecords }) {
+    state.cashRecords = [...cashRecords]
   }
 }
 
 export const actions = {
-  fetchScopedRecords: ({ commit }, { startDate, endDate } = {}) => {
+  fetchScopedRecords: async ({ commit }, { startDate, endDate } = {}) => {
     const today = new Date()
     if (!startDate) startDate = new Date(today.getFullYear(), today.getMonth())
     if (!endDate)
       endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1)
     const collection = firestore.collection('cashRecords')
-    collection
+    await collection
       .orderBy('date')
       .where('date', '>=', startDate.valueOf())
       .where('date', '<', endDate.valueOf())
       // .where('whose', '==', whose)
       .get()
       .then((querySnapShot) => {
+        const cashRecords = []
         querySnapShot.forEach((doc) => {
-          const cashRecord = new CashRecord(doc.data())
-          commit('addCashRecords', { cashRecord })
+          cashRecords.push(new CashRecord(doc.data(), doc.id))
         })
+        commit('setCashRecords', { cashRecords })
       })
   }
 }

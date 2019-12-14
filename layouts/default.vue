@@ -8,7 +8,10 @@ div
           img(src='~/assets/images/left.svg')
 
     .header__item
-      a(@click='signout') Sign Out
+      a(
+        v-if='isSignin'
+        @click='signout'
+        ) Sign Out
   .wrapper
     nuxt
 </template>
@@ -18,6 +21,9 @@ import Vue from 'vue'
 import { auth } from '~/plugins/firebase.js'
 export default Vue.extend({
   computed: {
+    isSignin() {
+      return this.$store.state.isSignin
+    },
     hasHistory() {
       return process.client ? history.length >= 1 : false
     }
@@ -29,6 +35,8 @@ export default Vue.extend({
         if (this.$route.name === 'signin') {
           this.$router.push('/')
         }
+      } else {
+        this.$router.push('/signin')
       }
     })
   },

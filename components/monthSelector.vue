@@ -4,7 +4,7 @@ section.scope
     span(@click='prevMonth')
       img(src='~/assets/images/left.svg')
 
-  h2.scope__scoped
+  h2.scope__scoped(@click='backToTop')
     span.scope__year {{ year }}年
     span.scope__month
       span.scope__monthAmount {{ month+1 }}
@@ -40,6 +40,15 @@ export default Vue.extend({
     },
     nextMonth() {
       this.$emit('month-changed', addMonth(this.value, 1))
+    },
+    backToTop() {
+      this.$router.push({
+        path: '/',
+        query: {
+          year: this.value.getFullYear(),
+          month: this.value.getMonth() + 1
+        }
+      })
     }
   }
 })

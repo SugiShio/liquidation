@@ -5,12 +5,15 @@ section
     @month-changed='updateScope')
   .total
     |合計
-    span {{ Number(total).toLocaleString() }}
+    span {{ numToString(total) }}
     |円
-  ul.list
+  .text(v-if='isLoading') 読み込み中
+  ul.list(v-else-if='records.length')
     list-item(
       v-for='record in records'
-      :record='record')
+      :record='record'
+      :key='record.id')
+  .text(v-else) 入出金がありません
   .addButton(
     @click='$router.push("/cashFlow/new")'
     size='small'
@@ -37,11 +40,16 @@ export default Vue.extend({
       scope
     }
   },
+  data() {
+    return {
+      isLoading: true
+    }
+  },
   computed: {
-    records() {
+    records(): CashRecord[] {
       return this.$store.state.cashFlow.cashRecords
     },
-    total() {
+    total(): number {
       return this.$store.getters['cashFlow/total']
     }
   },
@@ -54,19 +62,22 @@ export default Vue.extend({
       this.setRecords()
     },
     setRecords() {
-      this.$store.commit('cashFlow/resetCashRecords')
+      this.isLoading = true
       const year = this.scope.getFullYear()
       const month = this.scope.getMonth()
       const startDate = new Date(year, month)
       const endDate = new Date(year, month + 1)
-      this.$store.dispatch('cashFlow/fetchScopedRecords', {
-        startDate,
-        endDate
-      })
+      this.$store
+        .dispatch('cashFlow/fetchScopedRecords', {
+          startDate,
+          endDate
+        })
+        .then(() => {
+          this.isLoading = false
+        })
     },
-    date(timestamp: number) {
-      const date = new Date(timestamp)
-      return date.getDate()
+    numToString(num: number) {
+      return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
     }
   }
 })

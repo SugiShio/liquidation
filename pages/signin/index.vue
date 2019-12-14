@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  el-button(
+  .l-button(
     @click='signinWithGoogle'
   ) Google アカウントでログイン
   div
