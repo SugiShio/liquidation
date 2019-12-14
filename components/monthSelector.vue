@@ -1,14 +1,17 @@
 <template lang="pug">
 section.scope
   .scope__prev
-    span(@click='prevMonth') <
+    span(@click='prevMonth')
+      img(src='~/assets/images/left.svg')
+
   h2.scope__scoped
     span.scope__year {{ year }}年
     span.scope__month
       span.scope__monthAmount {{ month+1 }}
       | 月
   .scope__next
-    span(@click='nextMonth') >
+    span(@click='nextMonth')
+      img(src='~/assets/images/right.svg')
 </template>
 
 <script lang="ts">

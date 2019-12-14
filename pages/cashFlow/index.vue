@@ -14,7 +14,8 @@ section
   .addButton(
     @click='$router.push("/cashFlow/new")'
     size='small'
-    ) +
+    )
+      img(src='~/assets/images/plus.svg')
 </template>
 
 <script lang="ts">
@@ -90,13 +91,20 @@ export default Vue.extend({
   position: fixed;
   right: 20px;
   bottom: 20px;
-  width: 40px;
+  padding: 5px;
   border-radius: 20px;
   background-color: $color-text;
   box-shadow: 0 2px 5px rgba(#000, 0.5);
-  font-size: 30px;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.text {
+  margin: 10px 0;
   text-align: center;
-  line-height: 40px;
-  color: $color-main;
+  color: rgba($color-text, 0.6);
 }
 </style>

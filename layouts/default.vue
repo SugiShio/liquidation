@@ -2,9 +2,11 @@
 div
   header.header
     .header__item
-      div(
+      .header__backButton(
         v-if='hasHistory'
-        @click='goBack') <
+        @click='goBack')
+          img(src='~/assets/images/left.svg')
+
     .header__item
       a(@click='signout') Sign Out
   .wrapper
@@ -55,5 +57,9 @@ export default Vue.extend({
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
+
+  &__backButton img {
+    width: 30px;
+  }
 }
 </style>
