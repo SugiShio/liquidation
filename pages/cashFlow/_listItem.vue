@@ -1,5 +1,5 @@
 <template lang="pug">
-li.item
+li.item(@click='goEdit')
   .item__date {{ date }}日
   .item__content
     .item__name {{ record.name }}
@@ -10,20 +10,29 @@ li.item
 
 <script lang="ts">
 import Vue from 'vue'
+import CashRecord from '@/models/cashRecord.ts'
 export default Vue.extend({
   props: {
     record: {
       type: Object,
-      default: () => {}
+      default: () => new CashRecord()
     }
   },
   computed: {
-    amount() {
+    amount(): string {
       return Number(this.record.amount).toLocaleString()
     },
-    date() {
+    date(): number {
       const date = new Date(this.record.date)
       return date.getDate()
+    }
+  },
+  methods: {
+    goEdit() {
+      this.$router.push({
+        name: 'cashFlow-edit-id',
+        params: { id: this.record.id }
+      })
     }
   }
 })

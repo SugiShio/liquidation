@@ -55,7 +55,7 @@ export default Vue.extend({
       }
     }
   },
-  asyncData({ route }) {
+  asyncData({ route }): { scope: Date } {
     const year = Number(route.query.year)
     const month = Number(route.query.month)
     const scope =
