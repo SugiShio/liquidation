@@ -21,15 +21,14 @@ section
       img(src='~/assets/images/plus.svg')
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import listItem from './_listItem.vue'
 import firebase from '~/plugins/firebase.js'
 import { addMonth } from '@/scripts/date'
 import CashRecord from '@/models/cashRecord.ts'
 import monthSelector from '@/components/monthSelector.vue'
 
-export default Vue.extend({
+export default {
   components: { monthSelector, listItem },
   asyncData({ route }) {
     const year = Number(route.query.year)
@@ -46,10 +45,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    records(): CashRecord[] {
+    records() {
       return this.$store.state.cashFlow.cashRecords
     },
-    total(): number {
+    total() {
       return this.$store.getters['cashFlow/total']
     }
   },
@@ -57,7 +56,7 @@ export default Vue.extend({
     this.setRecords()
   },
   methods: {
-    updateScope(date: Date) {
+    updateScope(date) {
       this.scope = date
       this.setRecords()
     },
@@ -76,11 +75,11 @@ export default Vue.extend({
           this.isLoading = false
         })
     },
-    numToString(num: number) {
+    numToString(num) {
       return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

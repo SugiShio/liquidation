@@ -6,12 +6,11 @@ section
 
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import formComponent from '../_form.vue'
 import { firestore } from '~/plugins/firebase.js'
 import CashRecord from '@/models/cashRecord.ts'
-export default Vue.extend({
+export default {
   components: { formComponent },
   data() {
     const record = this.getRecord(this.$route.params.id)
@@ -47,8 +46,6 @@ export default Vue.extend({
           this.isPosting = false
           throw error
         })
-      /**
-       */
     },
     remove() {
       const date = new Date(this.record.date)
@@ -72,7 +69,7 @@ export default Vue.extend({
           throw error
         })
     },
-    getRecord(id: string): CashRecord {
+    getRecord(id) {
       firestore
         .collection('cashRecords')
         .doc(id)
@@ -86,7 +83,7 @@ export default Vue.extend({
         })
     }
   }
-})
+}
 </script>
 <style lang="scss" scoped>
 .mb20 {

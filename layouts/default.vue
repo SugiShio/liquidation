@@ -16,10 +16,9 @@ div
     nuxt
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import { auth } from '~/plugins/firebase.js'
-export default Vue.extend({
+export default {
   computed: {
     isSignin() {
       return this.$store.state.isSignin
@@ -51,7 +50,7 @@ export default Vue.extend({
       if (process.client) history.back()
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

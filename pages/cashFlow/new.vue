@@ -7,13 +7,12 @@ section
 
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import formComponent from './_form.vue'
 import firebase from '~/plugins/firebase.js'
 import CashRecord from '@/models/cashRecord.ts'
 
-export default Vue.extend({
+export default {
   components: { formComponent },
   data() {
     return {
@@ -55,5 +54,5 @@ export default Vue.extend({
         })
     }
   }
-})
+}
 </script>

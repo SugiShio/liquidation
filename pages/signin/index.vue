@@ -6,12 +6,11 @@ div
   div
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import firebase, { auth } from '~/plugins/firebase.js'
 const provider = new firebase.auth.GoogleAuthProvider()
 
-export default Vue.extend({
+export default {
   created() {
     if (this.$store.state.isSignin) {
       this.$router.push('/')
@@ -22,7 +21,6 @@ export default Vue.extend({
       auth
         .signInWithPopup(provider)
         .then((response) => {
-          console.log('addfs ', response.user)
           this.$store.dispatch('updateUser', {
             user: response.user
           })
@@ -33,5 +31,5 @@ export default Vue.extend({
         })
     }
   }
-})
+}
 </script>

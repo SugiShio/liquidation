@@ -8,10 +8,9 @@ li.item(@click='goEdit')
       |円
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import CashRecord from '@/models/cashRecord.ts'
-export default Vue.extend({
+export default {
   props: {
     record: {
       type: Object,
@@ -19,10 +18,10 @@ export default Vue.extend({
     }
   },
   computed: {
-    amount(): string {
+    amount() {
       return Number(this.record.amount).toLocaleString()
     },
-    date(): number {
+    date() {
       const date = new Date(this.record.date)
       return date.getDate()
     }
@@ -35,7 +34,7 @@ export default Vue.extend({
       })
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

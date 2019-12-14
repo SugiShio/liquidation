@@ -30,17 +30,16 @@ el-form(label-width='25%')
 
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import firebase from '~/plugins/firebase.js'
 import CashRecord from '@/models/cashRecord.ts'
 
-export default Vue.extend({
+export default {
   props: {
     record: {
       type: Object,
       default: () => new CashRecord()
     }
   }
-})
+}
 </script>

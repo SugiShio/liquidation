@@ -23,30 +23,29 @@ section
 
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import { addMonth } from '@/scripts/date'
 import monthSelector from '@/components/monthSelector.vue'
-export default Vue.extend({
+export default {
   components: { monthSelector },
   computed: {
-    total(): number {
+    total() {
       return this.$store.getters['cashFlow/total']
     },
-    usersTotal(): number {
+    usersTotal() {
       return this.$store.getters['cashFlow/usersTotal']()
     },
-    users(): [] {
+    users() {
       return this.$store.getters['cashFlow/users']
     },
-    usersPayment(): number {
+    usersPayment() {
       if (!this.users.length) return 0
       return Math.ceil(this.total / this.users.length - this.usersTotal)
     },
-    verb(): string {
+    verb() {
       return this.usersPayment < 0 ? 'もらう' : '支払う'
     },
-    detailLink(): { name: string; query: { year: number; month: number } } {
+    detailLink() {
       return {
         name: 'cashFlow',
         query: {
@@ -56,7 +55,7 @@ export default Vue.extend({
       }
     }
   },
-  asyncData({ route }): { scope: Date } {
+  asyncData({ route }) {
     const year = Number(route.query.year)
     const month = Number(route.query.month)
     const scope =
@@ -74,7 +73,7 @@ export default Vue.extend({
     this.setRecords()
   },
   methods: {
-    updateScope(date: Date) {
+    updateScope(date) {
       this.scope = date
     },
     setRecords() {
@@ -92,7 +91,7 @@ export default Vue.extend({
           this.isLoading = false
         })
     },
-    numToString(num: number) {
+    numToString(num) {
       return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
     }
   },
@@ -113,7 +112,7 @@ export default Vue.extend({
         year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>

@@ -14,10 +14,9 @@ section.scope
       img(src='~/assets/images/right.svg')
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script>
 import { addMonth } from '@/scripts/date'
-export default Vue.extend({
+export default {
   props: {
     value: {
       type: Date,
@@ -51,7 +50,7 @@ export default Vue.extend({
       })
     }
   }
-})
+}
 </script>
 
 <style lang="scss" scoped>
