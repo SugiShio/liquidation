@@ -66,7 +66,6 @@ export default {
     }
   },
   created() {
-    console.log(this.scope)
     this.setRecords()
   },
   methods: {
@@ -74,7 +73,6 @@ export default {
       this.scope = date
     },
     setRecords() {
-      console.log(this.scope)
       this.isLoading = true
       const year = this.scope.getFullYear()
       const month = this.scope.getMonth()

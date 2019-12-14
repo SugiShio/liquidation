@@ -3,9 +3,9 @@ div
   header.header
     .header__item
       .header__backButton(
-        v-if='hasHistory'
+        v-show='hasHistory'
         @click='goBack')
-          img(src='~/assets/images/left.svg')
+        img(src='~/assets/images/left.svg')
 
     .header__item
       a(
