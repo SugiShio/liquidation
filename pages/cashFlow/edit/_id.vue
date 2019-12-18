@@ -33,6 +33,7 @@ export default {
         name: this.record.name,
         amount: this.record.amount,
         isPayment: this.record.isPayment,
+        updatedAt: new Date(),
         date: this.record.date
       }
       const date = new Date(this.record.date)

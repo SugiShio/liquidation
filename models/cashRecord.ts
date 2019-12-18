@@ -5,7 +5,8 @@ export default class CashRecord {
   isPayment: boolean = true
   date: number = 0
   whose: string = ''
-  createdAt: Date = new Date()
+  createdAt: Date | null = null
+  updatedAt: Date | null = null
   constructor(data?: any, id?: string) {
     if (!data) {
       const today = new Date()
@@ -24,5 +25,6 @@ export default class CashRecord {
     this.date = data.date
     this.whose = data.whose
     this.createdAt = data.createdAt
+    this.updatedAt = data.updatedAt
   }
 }

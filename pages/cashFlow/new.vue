@@ -34,6 +34,7 @@ export default {
         amount: this.record.amount,
         isPayment: this.record.isPayment,
         createdAt: new Date(),
+        updatedAt: new Date(),
         date: this.record.date,
         whose
       }
