@@ -8,8 +8,9 @@ section
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import formComponent from './_form.vue'
-import firebase from '~/plugins/firebase.js'
+import { firestore } from '~/plugins/firebase.js'
 import CashRecord from '@/models/cashRecord.ts'
 
 export default {
@@ -20,11 +21,14 @@ export default {
       isPosting: false
     }
   },
+  computed: {
+    ...mapState(['currentRoomId'])
+  },
   methods: {
     create() {
       if (this.isPosting) return
       this.isPosting = true
-      const whose = this.$store.state.userName
+      const whose = this.$store.state.uid
       const data = {
         name: this.record.name,
         amount: this.record.amount,
@@ -34,8 +38,9 @@ export default {
         whose
       }
       const date = new Date(this.record.date)
-      firebase
-        .firestore()
+      firestore
+        .collection('rooms')
+        .doc(this.currentRoomId)
         .collection('cashRecords')
         .doc()
         .set(data)

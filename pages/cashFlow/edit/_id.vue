@@ -7,17 +7,24 @@ section
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import formComponent from '../_form.vue'
 import { firestore } from '~/plugins/firebase.js'
 import CashRecord from '@/models/cashRecord.ts'
+let roomRef
 export default {
   components: { formComponent },
   data() {
-    const record = this.getRecord(this.$route.params.id)
     return {
-      record,
+      record: {},
       isPosting: false
     }
+  },
+  computed: {
+    ...mapState(['currentRoomId'])
+  },
+  created() {
+    if (this.currentRoomId) this.setRecord()
   },
   methods: {
     update() {
@@ -29,9 +36,7 @@ export default {
         date: this.record.date
       }
       const date = new Date(this.record.date)
-      firestore
-        .collection('cashRecords')
-        .doc(this.record.id)
+      roomRef
         .update(data)
         .then(() => {
           this.$router.push({
@@ -51,9 +56,7 @@ export default {
       const date = new Date(this.record.date)
       if (!confirm('レコードを削除します。よろしいですか？'))
         return Promise.resolve()
-      return firestore
-        .collection('cashRecords')
-        .doc(this.record.id)
+      return roomRef
         .delete()
         .then(() => {
           this.$router.push({
@@ -69,10 +72,14 @@ export default {
           throw error
         })
     },
-    getRecord(id) {
-      firestore
+    setRecord() {
+      const id = this.$route.params.id
+      roomRef = firestore
+        .collection('rooms')
+        .doc(this.currentRoomId)
         .collection('cashRecords')
         .doc(id)
+      roomRef
         .get()
         .then((doc) => {
           this.record = new CashRecord(doc.data(), id)
@@ -81,6 +88,12 @@ export default {
           this.isPosting = false
           throw error
         })
+    }
+  },
+  watch: {
+    currentRoomId(id) {
+      if (!id) return
+      this.setRecord()
     }
   }
 }

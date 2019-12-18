@@ -1,5 +1,6 @@
 <template lang="pug">
 section
+  h2.roomName {{ room.name }}
   month-selector(
     v-model='scope'
     @month-changed='updateScope')
@@ -15,7 +16,7 @@ section
     .totalBox__item
       .totalBox__label 支払い済み
       .totalBox__amount
-        span {{ numToString(usersTotal) }}
+        span {{ numToString(usersTotal_) }}
         | 円
   router-link.l-button(
     :to='detailLink'
@@ -24,23 +25,21 @@ section
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import { addMonth } from '@/scripts/date'
 import monthSelector from '@/components/monthSelector.vue'
 export default {
   components: { monthSelector },
   computed: {
-    total() {
-      return this.$store.getters['cashFlow/total']
-    },
-    usersTotal() {
-      return this.$store.getters['cashFlow/usersTotal']()
-    },
-    users() {
-      return this.$store.getters['cashFlow/users']
+    ...mapState(['currentRoomId', 'room']),
+    ...mapGetters('cashFlow', ['total', 'usersTotal']),
+    usersTotal_() {
+      return this.usersTotal()
     },
     usersPayment() {
-      if (!this.users.length) return 0
-      return Math.ceil(this.total / this.users.length - this.usersTotal)
+      const users = this.room ? this.room.users : []
+      if (!users.length) return 0
+      return Math.ceil(this.total / users.length - this.usersTotal_)
     },
     verb() {
       return this.usersPayment < 0 ? 'もらう' : '支払う'
@@ -66,7 +65,7 @@ export default {
     }
   },
   created() {
-    this.setRecords()
+    if (this.currentRoomId) this.setRecords()
   },
   methods: {
     updateScope(date) {
@@ -92,6 +91,11 @@ export default {
     }
   },
   watch: {
+    currentRoomId(val) {
+      if (!val) return
+      this.setRecords()
+    },
+
     scope() {
       this.$router.push({
         query: {
@@ -113,6 +117,15 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/variables';
+.roomName {
+  text-align: center;
+  color: rgba($color-text, 0.7);
+}
+
+.scope {
+  margin: 20px 0;
+}
+
 .payment {
   margin: 40px 0;
   text-align: center;

@@ -1,5 +1,6 @@
 <template lang="pug">
 section
+  h2.roomName {{ room.name }}
   month-selector(
     v-model='scope'
     @month-changed='updateScope')
@@ -8,9 +9,9 @@ section
     span {{ numToString(total) }}
     |円
   .text(v-if='isLoading') 読み込み中
-  ul.list(v-else-if='records.length')
+  ul.list(v-else-if='cashRecords.length')
     list-item(
-      v-for='record in records'
+      v-for='record in cashRecords'
       :record='record'
       :key='record.id')
   .text(v-else) 入出金がありません
@@ -22,8 +23,8 @@ section
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import listItem from './_listItem.vue'
-import firebase from '~/plugins/firebase.js'
 import { addMonth } from '@/scripts/date'
 import CashRecord from '@/models/cashRecord.ts'
 import monthSelector from '@/components/monthSelector.vue'
@@ -41,15 +42,14 @@ export default {
     }
   },
   computed: {
-    records() {
-      return this.$store.state.cashFlow.cashRecords
-    },
+    ...mapState(['currentRoomId', 'room']),
+    ...mapState('cashFlow', ['cashRecords']),
     total() {
       return this.$store.getters['cashFlow/total']
     }
   },
   created() {
-    this.setRecords()
+    if (this.currentRoomId) this.setRecords()
   },
   methods: {
     updateScope(date) {
@@ -74,12 +74,27 @@ export default {
     numToString(num) {
       return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
     }
+  },
+  watch: {
+    currentRoomId(val) {
+      if (!val) return
+      this.setRecords()
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/assets/variables';
+.roomName {
+  text-align: center;
+  color: rgba($color-text, 0.7);
+}
+
+.scope {
+  margin: 20px 0;
+}
+
 .total {
   margin: 40px 0 20px;
   text-align: right;

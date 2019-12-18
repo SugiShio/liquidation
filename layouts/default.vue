@@ -30,10 +30,10 @@ export default {
   created() {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        this.$store.dispatch('updateUser', { user })
         if (this.$route.name === 'signin') {
           this.$router.push('/')
         }
+        this.$store.dispatch('setUp', { user })
       } else {
         this.$router.push('/signin')
       }
