@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  header.header
+  header.header(v-show='!isLoading')
     .header__item
       .header__backButton(
         v-show='hasHistory'
@@ -12,17 +12,19 @@ div
         v-if='isSignin'
         @click='signout'
         ) Sign Out
-  .wrapper
+  .wrapper(v-show='!isLoading')
     nuxt
+  loading
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { auth } from '~/plugins/firebase.js'
+import Loading from '@/components/loading'
 export default {
+  components: { Loading },
   computed: {
-    isSignin() {
-      return this.$store.state.isSignin
-    },
+    ...mapState(['isLoading', 'isSignin']),
     hasHistory() {
       return process.client ? history.length >= 1 : false
     }

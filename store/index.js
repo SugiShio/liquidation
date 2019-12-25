@@ -1,5 +1,6 @@
 import { firestore } from '~/plugins/firebase.js'
 export const state = () => ({
+  isLoading: true,
   isSignin: false,
   userName: '',
   localUser: {},
@@ -17,6 +18,9 @@ export const getters = {
 export const mutations = {
   setCurrentRoomId(state, { currentRoomId }) {
     state.currentRoomId = currentRoomId
+  },
+  setLoaded(state) {
+    state.isLoading = false
   },
   setRoom(state, { room }) {
     state.room = room
@@ -48,6 +52,7 @@ export const actions = {
       })
       .then((room) => {
         commit('setRoom', { room })
+        commit('setLoaded')
       })
       .catch((e) => {
         throw e
