@@ -37,7 +37,7 @@ export default {
       return this.usersTotal()
     },
     usersPayment() {
-      const users = this.room ? this.room.users : []
+      const users = this.room.users || []
       if (!users.length) return 0
       return Math.ceil(this.total / users.length - this.usersTotal_)
     },
