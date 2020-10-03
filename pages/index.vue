@@ -30,6 +30,16 @@ import { addMonth } from '@/scripts/date'
 import monthSelector from '@/components/monthSelector.vue'
 export default {
   components: { monthSelector },
+  data() {
+    const year = Number(this.$route.query.year)
+    const month = Number(this.$route.query.month)
+    const scope =
+      year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
+    return {
+      scope,
+      isLoading: true
+    }
+  },
   computed: {
     ...mapState(['currentRoomId', 'room']),
     ...mapGetters('cashFlow', ['total', 'usersTotal']),
@@ -54,14 +64,25 @@ export default {
       }
     }
   },
-  data() {
-    const year = Number(this.$route.query.year)
-    const month = Number(this.$route.query.month)
-    const scope =
-      year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
-    return {
-      scope,
-      isLoading: true
+  watch: {
+    currentRoomId(val) {
+      if (!val) return
+      this.setRecords()
+    },
+    scope() {
+      this.$router.push({
+        query: {
+          year: this.scope.getFullYear(),
+          month: this.scope.getMonth() + 1
+        }
+      })
+      this.setRecords()
+    },
+    '$route.query'() {
+      const year = Number(this.$route.query.year)
+      const month = Number(this.$route.query.month)
+      this.scope =
+        year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     }
   },
   created() {
@@ -88,28 +109,6 @@ export default {
     },
     numToString(num) {
       return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
-    }
-  },
-  watch: {
-    currentRoomId(val) {
-      if (!val) return
-      this.setRecords()
-    },
-
-    scope() {
-      this.$router.push({
-        query: {
-          year: this.scope.getFullYear(),
-          month: this.scope.getMonth() + 1
-        }
-      })
-      this.setRecords()
-    },
-    '$route.query'() {
-      const year = Number(this.$route.query.year)
-      const month = Number(this.$route.query.month)
-      this.scope =
-        year && month ? new Date(year, month - 1) : addMonth(new Date(), -1)
     }
   }
 }

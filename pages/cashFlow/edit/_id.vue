@@ -23,6 +23,12 @@ export default {
   computed: {
     ...mapState(['currentRoomId'])
   },
+  watch: {
+    currentRoomId(id) {
+      if (!id) return
+      this.setRecord()
+    }
+  },
   created() {
     if (this.currentRoomId) this.setRecord()
   },
@@ -89,12 +95,6 @@ export default {
           this.isPosting = false
           throw error
         })
-    }
-  },
-  watch: {
-    currentRoomId(id) {
-      if (!id) return
-      this.setRecord()
     }
   }
 }

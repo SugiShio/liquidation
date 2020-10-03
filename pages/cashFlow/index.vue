@@ -48,6 +48,12 @@ export default {
       return this.$store.getters['cashFlow/total']
     }
   },
+  watch: {
+    currentRoomId(val) {
+      if (!val) return
+      this.setRecords()
+    }
+  },
   created() {
     if (this.currentRoomId) this.setRecords()
   },
@@ -73,12 +79,6 @@ export default {
     },
     numToString(num) {
       return this.isLoading ? '---' : Number(Math.abs(num)).toLocaleString()
-    }
-  },
-  watch: {
-    currentRoomId(val) {
-      if (!val) return
-      this.setRecords()
     }
   }
 }
