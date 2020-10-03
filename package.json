@@ -8,6 +8,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
+    "heroku-postbuild": "npm run build",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "test": "jest"
@@ -36,5 +37,9 @@
     "prettier": "^1.16.4",
     "sass-loader": "^8.0.0",
     "vue-jest": "^4.0.0-0"
+  },
+  "engines": {
+    "node": "12.11.1",
+    "npm": "6.13.1"
   }
 }

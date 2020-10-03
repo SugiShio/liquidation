@@ -1,0 +1,16 @@
+.l-button {
+  display: block;
+  line-height: 40px;
+  border-radius: 20px;
+  border: 1px solid $color-text;
+  text-align: center;
+
+  &.disable {
+    opacity: 0.6;
+  }
+
+  &.danger {
+    color: $color-red;
+    border-color: $color-red;
+  }
+}

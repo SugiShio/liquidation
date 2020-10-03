@@ -1,10 +1,7 @@
 @charset 'utf-8';
-$font-family: 'Noto Sans Japanese', -apple-system, BlinkMacSystemFont,
-  'ヒラギノ角ゴ ProN W3', Meiryo, sans-serif;
-$font-size: 14px;
-$color-text: #4a4a4a;
 
 html {
+  position: relative;
   font-family: $font-family;
   font-size: 62.5%;
   font-weight: normal;
@@ -20,6 +17,18 @@ html {
   color: $color-text;
   border: 0;
   outline: none;
+
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100vh;
+    background: linear-gradient(160deg, $color-main, lighten($color-main, 5%));
+    z-index: -1;
+  }
 
   font-feature-settings: 'palt';
   -webkit-font-smoothing: antialiased;
